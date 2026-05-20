@@ -119,9 +119,38 @@ personal_projects: # 个人项目
 lab_tutorials:    # 实验教程
 ```
 
-照片字段放在 `basics.photo`。推荐写相对静态资源路径，例如 `/static/photo.jpg`，或直接写在线图片 URL。
-如果头像文件放在仓库根目录，例如 `self-portrait.png`，也可以写 `./self-portrait.png` 或 `/self-portrait.png`；应用只会为根目录下的常见图片扩展名提供访问。
-留空时页面会在右上角显示姓名缩写占位。
+### 头像图片
+
+照片字段放在 `basics.photo`。浏览器只能加载 Web URL，不能直接读取本机绝对路径。
+
+推荐方式是把图片放进 `static/`，然后使用 `/static/...` 路径：
+
+```text
+static/photo.jpg
+```
+
+```yaml
+basics:
+  photo: "/static/photo.jpg"
+```
+
+如果是私有头像，也可以把图片放在仓库根目录，例如 `self-portrait.png`，然后写：
+
+```yaml
+basics:
+  photo: "/self-portrait.png"
+```
+
+根目录图片访问是受限的：应用只会暴露根目录下的常见图片扩展名，例如 `.png`、`.jpg`、`.jpeg`、`.webp`、`.gif`、`.avif`，不会暴露 `README.md`、`resume.yaml` 等普通文件。
+
+不要写本机文件路径或未暴露目录：
+
+```yaml
+photo: "/home/user/photo.jpg"      # 浏览器无法访问
+photo: "examples/photo.jpg"        # examples/ 没有作为静态目录暴露
+```
+
+默认 `.gitignore` 会忽略 `resume.yaml`、`*.png`、`*.jpg`、`*.jpeg`，适合存放真实头像和个人简历。留空时页面会在右上角显示“照片”占位。
 
 完整示例见 [`examples/my_resume.yaml`](./examples/my_resume.yaml)。
 
