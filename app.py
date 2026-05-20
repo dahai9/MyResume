@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import Any, Dict
 
@@ -11,7 +12,21 @@ from pydantic import BaseModel
 
 
 BASE_DIR = Path(__file__).resolve().parent
-RESUME_FILE = BASE_DIR / "resume.yaml"
+
+
+def _resolve_resume_file() -> Path:
+    configured = os.getenv("RESUME_FILE")
+    if configured:
+        path = Path(configured)
+        return path if path.is_absolute() else BASE_DIR / path
+
+    default_file = BASE_DIR / "resume.yaml"
+    if default_file.exists():
+        return default_file
+    return BASE_DIR / "examples" / "my_resume.yaml"
+
+
+RESUME_FILE = _resolve_resume_file()
 
 app = FastAPI(title="MyResume", version="0.2.0")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")

@@ -1,6 +1,6 @@
 basics:
   name: dahai9
-  position: "xxx"
+  position: "AI Agent / LLM Agent 基础架构工程师"
   age: "2x岁"
   gender: ""
   phone: "9655933"
@@ -19,12 +19,8 @@ code:
     url: "https://dahai9.github.io/Sea_of_Bits"
 
 personal_docs:
-  summary: "关键词：Rust / Agent Runtime / Tool Calling / Context Engineering / MCP / Agent Memory / Self-Evolving Agent / Agentic RL 学习。近两个月围绕 Coding Agent、自进化 Agent、协议适配和 Agent 工具链持续产出项目与技术复盘。"
-  items:
-    - text: "目标岗位：Agent算法工程师、LLM Agent基础架构、AI Agent研发；主线能力是把 Goal、Criteria、Verification、Rollback 写进 Agent 工程闭环。"
-      url: "https://jobs.bytedance.com/experienced/position?keywords=agent&location=CT_128"
-    - text: "方法论：参考 goal-driven，把复杂任务拆成可验收目标；在 Sapience 中落成 GoalPlan、VerificationPipeline、attempt workspace 和审计日志。"
-      url: "https://github.com/lidangzzz/goal-driven/blob/main/readme_cn.md"
+  summary: "关键词：Rust / Agent Runtime / Tool Calling / Context Engineering / MCP / Agent Memory / Self-Evolving Agent / Agentic RL 学习。近两个月主线是把 Goal、Criteria、Verification、Rollback 写进 Coding Agent 工程闭环。"
+  items: []
 
 team_projects: []
 
@@ -33,11 +29,11 @@ personal_projects:
     name: "sapience - Goal-Driven Self-Evolving Coding Agent"
     role: "核心开发"
     url: "https://github.com/dahai9/sapience"
-    description: "本地优先 Rust Coding Agent 与自更新实验平台：从交互历史提取 RuntimeSignal，生成 GoalPlan / UpdateProposal，在隔离 attempt workspace 中执行候选修改、验证、回滚和审计。"
+    description: "Rust Coding Agent 与自更新实验平台：从交互历史提取 RuntimeSignal，生成 GoalPlan / UpdateProposal，并在隔离 attempt workspace 中完成候选修改、验证、回滚和审计。"
     highlights:
-      - "实现 goal-driven self-evolution：history/request log -> RuntimeSignal -> SelfUpdatePlanner -> GoalPlan -> SelfUpdateRunner -> attempt ledger。"
-      - "把 fmt/check/clippy/test/deny、SWE smoke、baseline vs candidate scorecard、rollback plan 写入候选接受条件，避免 Agent 自修改退化。"
-    tech_stack: "Rust、Tokio、Agent Runtime、GoalPlan、Self-Evolving Agent、Context Engineering、Tool Calling、SWE-bench"
+      - "实现 goal-driven self-evolution：history/request log -> RuntimeSignal -> SelfUpdatePlanner -> GoalPlan -> SelfUpdateRunner。"
+      - "将 fmt/check/clippy/test、SWE smoke、baseline/candidate scorecard、rollback plan 写入候选接受条件。"
+    tech_stack: "Rust、Tokio、Agent Runtime、GoalPlan、Self-Evolving Agent、Context Engineering、SWE-bench"
 
   - date: "2026-05 ~ 2026-05"
     name: "responses-adapter - Responses API 协议兼容层"
@@ -45,19 +41,19 @@ personal_projects:
     url: "https://github.com/dahai9/response-adapter"
     description: "将 OpenAI Responses API 请求转换为 Chat Completions，帮助 Codex 等 Agent 工具接入 OpenAI-compatible provider。"
     highlights:
-      - "覆盖 instructions/message/function_call_output、function/custom tool、namespaced tools、tool history、tool_search 等协议差异。"
-      - "实现 SSE 流式响应翻译与 DeepSeek reasoning_content 回放，保障多轮工具调用和 thinking/tool 子轮次可连续运行。"
-    tech_stack: "Rust、Axum、Tokio、SSE、Responses API、Chat Completions、Function Calling、DeepSeek"
+      - "覆盖 instructions、function_call_output、function/custom tool、namespaced tools、tool history 等协议差异。"
+      - "实现 SSE 流式翻译与 DeepSeek reasoning_content 回放，保障多轮工具调用和 thinking/tool 子轮次连续运行。"
+    tech_stack: "Rust、Axum、Tokio、SSE、Responses API、Chat Completions、Function Calling"
 
   - date: "2026-03 ~ 2026-05"
     name: "Agent 工具与记忆基础设施：openlink-rs / evermemos-rs"
     role: "核心开发 / 架构重写"
     url: "https://github.com/dahai9/openlink-rs"
-    description: "围绕 Agent 可调用工具和长期记忆补齐基础设施：网页 AI 本地工具代理、Agent Memory Rust 重写、MCP 接入和多语言生态。"
+    description: "围绕 Agent 可调用工具和长期记忆补齐基础设施：网页 AI 本地工具代理、Agent Memory Rust 重写与 MCP 接入。"
     highlights:
-      - "openlink-rs：Rust/Axum/Tokio 本地代理，提供 exec/read/write/grep/edit/web_fetch/skill 等工具，适配 ChatGPT、Gemini、AI Studio。"
-      - "evermemos-rs：将 Agent Memory 从 Python 服务重写到 Rust，设计 agentic retrieval、MemCell/Episode/Profile 提取、SurrealDB、MCP 和 tracing。"
-    tech_stack: "Rust、Axum、Tokio、TypeScript、Browser Extension、MCP、Agent Memory、Hybrid Search、RRF、Sandbox"
+      - "openlink-rs：Rust/Axum/Tokio 本地代理，提供 exec/read/write/grep/edit/web_fetch/skill 等工具。"
+      - "evermemos-rs：Agent Memory Rust 重写，设计 agentic retrieval、MemCell/Episode/Profile、SurrealDB、MCP 和 tracing。"
+    tech_stack: "Rust、Axum、Tokio、TypeScript、Browser Extension、MCP、Agent Memory、Hybrid Search、Sandbox"
 
 lab_tutorials:
   - date: "2026-03 ~ 2026-05"
@@ -66,6 +62,6 @@ lab_tutorials:
     url: "https://github.com/dahai9/Sea_of_Bits"
     description: "用博客沉淀 Agent 架构和源码级工程复盘，并开发面向 LLM Agent 的 HAR 分析工具与 Skill。"
     highlights:
-      - "文章覆盖自进化 Agent、Sapience goal-driven self-update、Responses custom tool bridge、openlink-rs 工具系统、EverMemOS Rust 重写。"
-      - "har_analyzer 将大型 HAR 转为 LLM 友好的 Markdown/JSON，并提供 Claude Code / Codex / Gemini 可复用 Skill。"
-    tech_stack: "Astro、TypeScript、Markdown/MDX、Rust、clap、serde、HAR、LLM Skill、Nix"
+      - "复盘自进化 Agent、goal-driven self-update、Responses custom tool bridge、openlink-rs 工具系统、EverMemOS Rust 重写。"
+      - "har_analyzer 将大型 HAR 转为 LLM 友好的 Markdown/JSON，并提供 Claude Code / Codex / Gemini Skill。"
+    tech_stack: "Astro、TypeScript、Markdown/MDX、Rust、HAR、LLM Skill、Nix"
