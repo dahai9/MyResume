@@ -5,13 +5,14 @@ from typing import Any, Dict
 import yaml
 from fastapi import FastAPI, HTTPException
 from fastapi.requests import Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 
 BASE_DIR = Path(__file__).resolve().parent
+ROOT_IMAGE_EXTENSIONS = {".avif", ".gif", ".jpeg", ".jpg", ".png", ".webp"}
 
 
 def _resolve_resume_file() -> Path:
@@ -121,6 +122,19 @@ def put_resume_raw(payload: ResumeRawPayload) -> Dict[str, str]:
         raise HTTPException(status_code=400, detail="YAML 顶层必须是对象")
     RESUME_FILE.write_text(payload.yaml_text, encoding="utf-8")
     return {"message": "YAML 已保存"}
+
+
+@app.get("/{asset_name}", include_in_schema=False)
+def root_image_asset(asset_name: str) -> FileResponse:
+    if Path(asset_name).name != asset_name:
+        raise HTTPException(status_code=404, detail="Not found")
+    if Path(asset_name).suffix.lower() not in ROOT_IMAGE_EXTENSIONS:
+        raise HTTPException(status_code=404, detail="Not found")
+
+    asset_path = BASE_DIR / asset_name
+    if not asset_path.is_file():
+        raise HTTPException(status_code=404, detail="Not found")
+    return FileResponse(asset_path)
 
 
 if __name__ == "__main__":

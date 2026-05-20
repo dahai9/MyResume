@@ -119,7 +119,9 @@ personal_projects: # 个人项目
 lab_tutorials:    # 实验教程
 ```
 
-照片字段放在 `basics.photo`。可以写相对静态资源路径，例如 `/static/photo.jpg`，或直接写在线图片 URL；留空时页面会在右上角显示姓名缩写占位。
+照片字段放在 `basics.photo`。推荐写相对静态资源路径，例如 `/static/photo.jpg`，或直接写在线图片 URL。
+如果头像文件放在仓库根目录，例如 `self-portrait.png`，也可以写 `./self-portrait.png` 或 `/self-portrait.png`；应用只会为根目录下的常见图片扩展名提供访问。
+留空时页面会在右上角显示姓名缩写占位。
 
 完整示例见 [`examples/my_resume.yaml`](./examples/my_resume.yaml)。
 
