@@ -1,9 +1,10 @@
 # MyResume
 
-一个 YAML 文件定义所有内容，在线编辑，实时预览，可一键导出 PDF。
+一个 YAML 文件定义所有内容，在线编辑，实时预览，可一键导出 PDF。仓库内置
+`generate-resume` Codex Skill，用于根据目标岗位、GitHub 项目、本地仓库和博客证据生成一页 A4 简历。
 
 
-克隆仓库 → 编辑 `resume.yaml` → 启动服务 → 浏览器打开即可预览和导出。
+典型流程：选择目标岗位 → 让 Codex 使用 Skill 深挖项目证据 → 更新 YAML 简历 → 浏览器预览 → 导出一页 PDF。
 
 ## Preview
 
@@ -27,6 +28,13 @@ uv sync
 uv run uvicorn app:app --reload --host 127.0.0.1 --port 8010
 ```
 
+默认会优先读取根目录 `resume.yaml`；如果不存在，则读取 `examples/my_resume.yaml`。
+也可以显式指定简历文件：
+
+```bash
+RESUME_FILE=examples/my_resume.yaml uv run uvicorn app:app --reload --host 127.0.0.1 --port 8010
+```
+
 也可以使用脚本：
 
 ```bash
@@ -38,12 +46,54 @@ bash start.sh
 ## How It Works
 
 ```
-resume.yaml          ← 你的简历数据（唯一需要编辑的文件）
+resume.yaml          ← 你的私有简历数据（可选，优先读取，已被 .gitignore 忽略）
+examples/my_resume.yaml ← 仓库示例简历，也是默认回退数据
+.codex/skills/generate-resume/SKILL.md ← 面向岗位生成简历的 Codex Skill
 templates/resume.html ← Jinja2 渲染模板
 static/style.css      ← 样式（A4 排版、编辑器布局、打印适配）
 app.py                ← FastAPI 服务
 pyproject.toml        ← uv 管理的项目依赖
 ```
+
+## Generate With Skill
+
+本仓库的 Skill 位于 `.codex/skills/generate-resume/SKILL.md`。在 Codex 中打开仓库后，可以直接这样请求：
+
+```text
+使用 generate-resume skill，根据这个岗位链接和我的 GitHub/本地项目，优化 examples/my_resume.yaml，要求 A4 一页。
+岗位链接：<job-url>
+GitHub：<github-user>
+```
+
+这个 Skill 会引导 Codex 做几件事：
+
+- 抓取目标岗位，提取岗位关键词和硬性要求。
+- 用 `gh` 查询 GitHub 仓库，并优先读取同名本地 checkout 的 README、源码、docs、tests、Skill/Agent 文件。
+- 从项目里筛选 3 个最匹配岗位的主项目和 1 个博客/工具链补充项。
+- 写入 easyCV 已渲染字段，例如 `basics.position`、`personal_docs.summary`、`personal_projects`、`lab_tutorials`。
+- 控制内容密度，避免项目堆砌，最后用浏览器或 PDF 导出校验是否为一页。
+
+详细教程见 [docs/generate-resume-with-skill.md](docs/generate-resume-with-skill.md)。
+
+## Requirements
+
+基础软件：
+
+- Python 3.10+
+- `uv`
+- Git
+- Chrome 或 Edge，用于预览和打印 PDF
+
+推荐软件：
+
+- GitHub CLI `gh`，用于查询近期 GitHub 项目；先执行 `gh auth login`
+- `rg`，用于快速搜索本地仓库证据
+- Codex，使用仓库内 `.codex/skills/generate-resume` Skill
+
+推荐 MCP/浏览器能力：
+
+- Chrome DevTools MCP：让 Codex 打开岗位页、预览简历、检查页面高度和导出效果
+- GitHub CLI 或 GitHub MCP：查询仓库元数据、更新时间、项目描述和公开证据
 
 ### 编辑简历
 
@@ -71,7 +121,7 @@ lab_tutorials:    # 实验教程
 
 照片字段放在 `basics.photo`。可以写相对静态资源路径，例如 `/static/photo.jpg`，或直接写在线图片 URL；留空时页面会在右上角显示姓名缩写占位。
 
-完整示例见 [`examples/lvy.yaml`](./examples/lvy.yaml)。
+完整示例见 [`examples/my_resume.yaml`](./examples/my_resume.yaml)。
 
 ## API
 
