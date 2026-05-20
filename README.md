@@ -2,7 +2,6 @@
 
 一个 YAML 文件定义所有内容，在线编辑，实时预览，可一键导出 PDF。
 
-[示例简历 PDF](https://github.com/lvy010/X-Plore/blob/main/data/CV.pdf)
 
 克隆仓库 → 编辑 `resume.yaml` → 启动服务 → 浏览器打开即可预览和导出。
 
@@ -22,7 +21,7 @@ http://localhost:8010/editor    ← 左侧 YAML 编辑 + 右侧实时预览
 需要 Python 3.10+ 与 [uv](https://docs.astral.sh/uv/)。
 
 ```bash
-git clone https://github.com/<your-name>/MyResume.git
+git clone https://github.com/dahai9/MyResume.git
 cd MyResume
 uv sync
 uv run uvicorn app:app --reload --host 127.0.0.1 --port 8010
@@ -93,9 +92,11 @@ docker build -t myresume .
 docker run -p 8010:8010 myresume
 ```
 
-Acknowledgements
+## Acknowledgements
+
 - https://github.com/hijiangtao/resume
 - https://github.com/yamlresume/yamlresume
+- https://github.com/lvy010/easyCV
 
 ## License
 
