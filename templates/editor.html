@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyResume 编辑器</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="editor-page">
+      <section class="editor-panel" aria-label="YAML 编辑器">
+        <header class="editor-toolbar">
+          <div>
+            <p class="eyebrow">MyResume</p>
+            <h1>YAML Resume Editor</h1>
+          </div>
+          <div class="editor-actions">
+            <a class="ghost-button" href="/resume" target="_blank" rel="noreferrer">打开预览</a>
+            <button class="primary-button" id="saveBtn">保存 YAML</button>
+          </div>
+        </header>
+        <textarea id="yamlInput" spellcheck="false">{{ yaml_text }}</textarea>
+        <footer class="editor-status">
+          <span id="status">已载入</span>
+          <span id="metaStatus">0 行</span>
+        </footer>
+      </section>
+
+      <section class="preview-panel" aria-label="简历预览">
+        <iframe id="previewFrame" src="/resume" title="简历预览"></iframe>
+      </section>
+    </main>
+
+    <script>
+      const saveBtn = document.getElementById("saveBtn");
+      const yamlInput = document.getElementById("yamlInput");
+      const statusText = document.getElementById("status");
+      const metaStatus = document.getElementById("metaStatus");
+      const previewFrame = document.getElementById("previewFrame");
+
+      function refreshPreview() {
+        previewFrame.src = "/resume?t=" + Date.now();
+      }
+
+      function updateMeta() {
+        const lineCount = yamlInput.value.split("\n").length;
+        metaStatus.textContent = `${lineCount} 行`;
+      }
+
+      updateMeta();
+      yamlInput.addEventListener("input", () => {
+        statusText.textContent = "未保存";
+        updateMeta();
+      });
+
+      saveBtn.addEventListener("click", async () => {
+        statusText.textContent = "保存中...";
+        saveBtn.disabled = true;
+        try {
+          const resp = await fetch("/api/resume/raw", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ yaml_text: yamlInput.value }),
+          });
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.detail || "保存失败");
+          statusText.textContent = data.message || "已保存";
+          refreshPreview();
+        } catch (err) {
+          statusText.textContent = "保存失败：" + err.message;
+        } finally {
+          saveBtn.disabled = false;
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "s") {
+          event.preventDefault();
+          saveBtn.click();
+        }
+      });
+    </script>
+  </body>
+</html>
